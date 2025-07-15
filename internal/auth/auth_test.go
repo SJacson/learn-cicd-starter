@@ -1,9 +1,9 @@
 package auth
 
 import (
+	"errors"
 	"net/http"
 	"testing"
-	"errors"
 )
 
 func TestGetAPIKey(t *testing.T) {
@@ -11,13 +11,13 @@ func TestGetAPIKey(t *testing.T) {
 	tests := []struct {
 		name          string
 		headers       http.Header
-		want   string
+		want          string
 		expectedError error
 	}{
 		{
 			name:          "no header",
 			headers:       http.Header{},
-			want:   "",
+			want:          "",
 			expectedError: ErrNoAuthHeaderIncluded,
 		},
 		{
@@ -25,7 +25,7 @@ func TestGetAPIKey(t *testing.T) {
 			headers: http.Header{
 				"Authorization": []string{"Bearer abc123"},
 			},
-			want:   "",
+			want:          "",
 			expectedError: ErrMalformedHeader,
 		},
 		{
@@ -33,7 +33,7 @@ func TestGetAPIKey(t *testing.T) {
 			headers: http.Header{
 				"Authorization": []string{"ApiKey"},
 			},
-			want:   "",
+			want:          "",
 			expectedError: ErrMalformedHeader,
 		},
 		{
@@ -41,7 +41,7 @@ func TestGetAPIKey(t *testing.T) {
 			headers: http.Header{
 				"Authorization": []string{"ApiKey validtoken123"},
 			},
-			want:   "validtoken123",
+			want:          "validtoken123",
 			expectedError: nil,
 		},
 	}
